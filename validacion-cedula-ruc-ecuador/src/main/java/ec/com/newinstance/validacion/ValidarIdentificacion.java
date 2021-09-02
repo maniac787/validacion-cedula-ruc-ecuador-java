@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * @author maniac787@gmail.com
+ * @author <a href="mailto:maniac787@gmail.com">Roberto Chasipanta</a>
  */
 public class ValidarIdentificacion {
     private static final ValidarIdentificacion VALIDAR_IDENTIFICACION;

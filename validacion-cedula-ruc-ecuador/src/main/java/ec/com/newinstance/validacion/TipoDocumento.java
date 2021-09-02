@@ -1,5 +1,8 @@
 package ec.com.newinstance.validacion;
 
+/**
+ * @author <a href="mailto:maniac787@gmail.com">Roberto Chasipanta</a>
+ */
 public class TipoDocumento {
     private static final Integer TIPO_CEDULA = 1;
     private static final Integer TIPO_RUC_NATURAL = 2;

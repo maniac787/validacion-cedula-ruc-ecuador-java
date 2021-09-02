@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author <a href="mailto:maniac787@gmail.com">Roberto Chasipanta</a>
+ */
 @RestController
 @RequestMapping("/api")
 public class ValidacionController {
