@@ -3,6 +3,13 @@ package ec.com.newinstance.validacion;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * @author maniac787@gmail.com
  */
@@ -210,45 +217,32 @@ public class ValidarIdentificacion {
      * @throws Exception
      */
     protected boolean algoritmoModulo11(String digitosIniciales, int digitoVerificador, Integer tipo) throws Exception {
-        Integer[] arrayCoeficientes = null;
+        List<Integer> arrayCoeficientes = null;
 
         switch (tipo) {
 
             case 3:
-                arrayCoeficientes = new Integer[]{4, 3, 2, 7, 6, 5, 4, 3, 2};
+                arrayCoeficientes = Arrays.asList(4, 3, 2, 7, 6, 5, 4, 3, 2);
                 break;
             case 4:
-                arrayCoeficientes = new Integer[]{3, 2, 7, 6, 5, 4, 3, 2};
+                arrayCoeficientes = Arrays.asList(3, 2, 7, 6, 5, 4, 3, 2);
                 break;
             default:
                 throw new Exception("Tipo de Identificacion no existe.");
         }
 
-        Integer[] digitosInicialesTMP = new Integer[digitosIniciales.length()];
-        int indice = 0;
-        for (char valorPosicion : digitosIniciales.toCharArray()) {
-            digitosInicialesTMP[indice] = NumberUtils.createInteger(String.valueOf(valorPosicion));
-            indice++;
-        }
+        List<Integer> digitosInicialesTMP = IntStream.range(0, digitosIniciales.length()).mapToObj(
+                        i -> NumberUtils.createInteger(String.valueOf(digitosIniciales.charAt(i)))).
+                collect(Collectors.toCollection(() -> new ArrayList<>(digitosIniciales.length())));
 
-        int total = 0;
-        int key = 0;
-        for (Integer valorPosicion : digitosInicialesTMP) {
-            if (key < arrayCoeficientes.length) {
-                valorPosicion = (digitosInicialesTMP[key] * arrayCoeficientes[key]);
 
-                if (valorPosicion >= 10) {
-                    char[] valorPosicionSplit = String.valueOf(valorPosicion).toCharArray();
-                    valorPosicion = (Integer.parseInt(String.valueOf(valorPosicionSplit[0]))) + (Integer.parseInt(String.valueOf(valorPosicionSplit[1])));
-                    System.out.println(valorPosicion);
-                }
-                total = total + valorPosicion;
-            }
+        AtomicInteger consolidadodMultiplicacionIndiceConeficiente = new AtomicInteger();
+        List<Integer> finalArrayCoeficientes = arrayCoeficientes;
+        IntStream.range(0, arrayCoeficientes.size()).map(x -> (digitosInicialesTMP.get(x) * finalArrayCoeficientes.get(x))).
+                forEach(consolidadodMultiplicacionIndiceConeficiente::addAndGet);
 
-            key++;
-        }
 
-        int residuo = total % 11;
+        int residuo = consolidadodMultiplicacionIndiceConeficiente.get() % 11;
         int resultado;
 
         if (residuo == 0) {
